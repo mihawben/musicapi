@@ -1,0 +1,20 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "golang",    //必填
+            "type": "go",        //必填 编译语言类型
+            "request": "launch", //必填 launch(启动)和attach(附加),后者适用于远程调用
+            "mode": "auto", 
+            "env": {             //需要的环境变量
+               // "REDIS_ADDR": "10.111.111.111:8527",
+               // "REDIS_PASSWORD": "123456"
+            },
+            "program": "${workspaceFolder}" //必填 调试 VS Code打开工作空间的根目录下的所有文件
+        }
+    ]
+}
+ 
