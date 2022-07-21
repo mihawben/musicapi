@@ -4,17 +4,18 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	
 
 	"net/http"
 )
-type Kuwomodel struct{
-	Filename string `json:"filename"`    
-	 Sqhash  string `json:"sqhash"`   
-	 Key     string `json:"key"`   
 
+type Kuwomodel struct {
+	Filename string `json:"filename"`
+	Sqhash   string `json:"sqhash"`
+	Key      string `json:"key"`
 }
-func Kuwomusic(urlname string) ([]Kuwomodel) {
+
+//调用接口 返回音乐链接
+func Kuwomusic(urlname string) []Kuwomodel {
 
 	client := &http.Client{}
 	reqest, _ := http.NewRequest("GET", urlname, nil)
@@ -37,10 +38,10 @@ func Kuwomusic(urlname string) ([]Kuwomodel) {
 	}
 	var Kuwomodellist []Kuwomodel
 	err := json.Unmarshal([]byte(bodystr), &Kuwomodellist)
-	if err!=nil{
+	if err != nil {
 		return Kuwomodellist
 
 	}
 	return Kuwomodellist
-	
+
 }

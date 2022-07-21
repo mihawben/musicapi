@@ -18,6 +18,7 @@ type Musiclinkout struct {
 	MusicLink string `json:"musiclink"`
 }
 
+//返回歌单及链接
 
 func Musiclinklist(page string,pagesize string, name string)([]Musiclinkout,int){
 

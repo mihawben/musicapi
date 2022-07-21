@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-
+//音乐名称和播放地址列表
 func Musiclinklist(c *gin.Context){
 page:=c.Query("page")
 pagesize:=c.Query("pagesize")
