@@ -1,7 +1,6 @@
 package model
 
 import (
-	
 	"music/util"
 	"strings"
 
@@ -24,7 +23,7 @@ type Musiclinkout struct {
 func Musiclinklist(page string, pagesize string, name string) ([]Musiclinkout, int) {
 
 	var MusiclikList []MusicLink
-	var Kuwomodellist []util.Kuwomodel
+	var Kuwomodellist util.Kugoinfo
 	var Musiclinkoutlist []Musiclinkout
 	var pageCount int
 	err = db.Select("Linkname", "Link").Find(&MusiclikList).Error
@@ -41,10 +40,13 @@ func Musiclinklist(page string, pagesize string, name string) ([]Musiclinkout, i
 			build.WriteString(pagesize)
 			s3 := build.String()
 			Kuwomodellist = util.Kuwomusic(s3)
-			for ids, v := range Kuwomodellist {
-				
-				Musiclinkoutlist[ids].MusicName = v.Data
-				Musiclinkoutlist[ids].MusicLink = v.Data
+			for ids, v := range Kuwomodellist.Info{
+				ids=ids+1
+				if v.Filename!="" && v.Sqhash!=""{
+					Musiclinkoutlist[ids].MusicName = v.Filename
+					Musiclinkoutlist[ids].MusicLink = v.Sqhash
+				}
+				    
 
 			}
 			return Musiclinkoutlist, pageCount

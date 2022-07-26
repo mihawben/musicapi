@@ -15,13 +15,22 @@ type Kuwomodel struct {
 	//Filename string `json:"filename"`
 	//Sqhash   string `json:"sqhash"`
 	//Key      string `json:"key"`
-	Status  float64     `json:"status"`
-	Errcode float64     `json:"errcode"`
-	Data    string `json:"data"`
+	Status  float64                `json:"status"`
+	Errcode float64                `json:"errcode"`
+	Data    map[string]interface{} `json:"data"`
+}
+type Kugoinfo struct{
+Info  []Kugohash `json:"info"`
+
+}
+type Kugohash struct {
+	Filename string `json:"filename"`
+	Sqhash   string `json:"sqhash"`
+	Key      string `json:"key"`
 }
 
 //调用接口 返回音乐链接
-func Kuwomusic(urlname string) []Kuwomodel {
+func Kuwomusic(urlname string) Kugoinfo {
 
 	client := &http.Client{}
 	reqest, err := http.NewRequest("GET", urlname, nil)
@@ -29,7 +38,9 @@ func Kuwomusic(urlname string) []Kuwomodel {
 		fmt.Println(err)
 		log.Fatal(err)
 	}
-	var Kuwomodellist []Kuwomodel
+	var Kuwomodellist Kugoinfo
+	var Kuwomodelone Kuwomodel
+
 	reqest.Header.Set("Accept", "*/*")
 	reqest.Header.Set("Accept-Charset", "GBK,utf-8;q=0.7,*;q=0.3")
 	reqest.Header.Set("Accept-Encoding", "requests+bs4.BeautifulSoup")
@@ -48,9 +59,15 @@ func Kuwomusic(urlname string) []Kuwomodel {
 		log.Printf("调用成功 数据为%s 读取完成/n", bodystr)
 		fmt.Println(bodystr)
 		returnMap := ParseResponse(body)
-		err := mapstructure.Decode(returnMap, &Kuwomodellist)
+		err := mapstructure.Decode(returnMap, &Kuwomodelone)
+
 		if err == nil {
+			err := mapstructure.Decode(Kuwomodelone.Data, &Kuwomodellist)
+			if err == nil {
+
+			
 			return Kuwomodellist
+			}
 		}
 
 	}
