@@ -24,7 +24,7 @@ func Musiclinklist(page string, pagesize string, name string) ([]Musiclinkout, i
 
 	var MusiclikList []MusicLink
 	var Kuwomodellist util.Kugoinfo
-	var Musiclinkoutlist []Musiclinkout
+	
 	var pageCount int
 	err = db.Select("Linkname", "Link").Find(&MusiclikList).Error
 	for _, s := range MusiclikList {
@@ -40,8 +40,10 @@ func Musiclinklist(page string, pagesize string, name string) ([]Musiclinkout, i
 			build.WriteString(pagesize)
 			s3 := build.String()
 			Kuwomodellist = util.Kuwomusic(s3)
+			//初始化数组  添加数组长度
+			 Musiclinkoutlist:= make([]Musiclinkout,len(Kuwomodellist.Info))
 			for ids, v := range Kuwomodellist.Info{
-				ids=ids+1
+				
 				if v.Filename!="" && v.Sqhash!=""{
 					Musiclinkoutlist[ids].MusicName = v.Filename
 					Musiclinkoutlist[ids].MusicLink = v.Sqhash
@@ -53,5 +55,5 @@ func Musiclinklist(page string, pagesize string, name string) ([]Musiclinkout, i
 		}
 
 	}
-	return Musiclinkoutlist, pageCount
+	return nil, pageCount
 }
