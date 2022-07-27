@@ -13,10 +13,7 @@ type MusicLink struct {
 	Link     string `gorm:"type:varchar(500);not null" json:"link" label:"链接"`
 }
 
-type Musiclinkout struct {
-	MusicName string `json:"musicname"`
-	MusicLink string `json:"musiclink"`
-}
+
 
 //返回歌单及链接
 
@@ -44,9 +41,9 @@ func Musiclinklist(page string, pagesize string, name string) ([]Musiclinkout, i
 			 Musiclinkoutlist:= make([]Musiclinkout,len(Kuwomodellist.Info))
 			for ids, v := range Kuwomodellist.Info{
 				
-				if v.Filename!="" && v.Sqhash!=""{
+				if v.Filename!="" && v.Hash!=""{
 					Musiclinkoutlist[ids].MusicName = v.Filename
-					Musiclinkoutlist[ids].MusicLink = v.Sqhash
+					Musiclinkoutlist[ids].MusicLink = v.Hash
 				}
 				    
 
