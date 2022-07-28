@@ -28,16 +28,17 @@ type Kugohash struct {
 	Hash     string `json:"hash"`
 	Key      string `json:"key"`
 }
+
 //返回音乐名称和音乐链接及歌词
 type Musiclinkout struct {
-	MusicSonger string `json:"author_name"`
-	MusicName string `json:"song_name"`
-	MusicLink string `json:"play_url"`
-	Musiclyric  string `json:"lyrics"`
+	Author_name string `json:"author_name"`
+	Song_name   string `json:"song_name"`
+	Play_url    string `json:"play_url"`
+	Lyrics      string `json:"lyrics"`
 }
 
 //调用接口 返回音乐链接
-func Kuwomusic(urlname string) Kugoinfo {
+func Kuwomusic(urlname string) []Musiclinkout {
 
 	client := &http.Client{}
 	reqest, err := http.NewRequest("GET", urlname, nil)
@@ -71,16 +72,17 @@ func Kuwomusic(urlname string) Kugoinfo {
 		if err == nil {
 			err := mapstructure.Decode(Kuwomodelone.Data, &Kuwomodellist)
 			if err == nil {
-
+				fmt.Println(err)
 				//return Kuwomodellist
 			}
 		}
+		 Musiclinkoutlist :=make([]Musiclinkout,len(Kuwomodellist.Info))
 		if len(Kuwomodellist.Info) != 0 {
 			for n, v := range Kuwomodellist.Info {
 				//	databyd:=[]byte(v.Sqhash+"kgcloud")
-
+				var Musiclinkout Musiclinkout
 				v.Key = "484a7efeea23ffd3e7192dd7fc6bedb0"
-				urls := "https://wwwapi.kugou.com/yy/index.php?r=play/getdata&callback=jQuery1910002921481042300389_1658913319552&hash=" + v.Hash + "&mid=" + v.Key + "&platid=4&album_id=973367"
+				urls := "https://wwwapi.kugou.com/yy/index.php?r=play/getdata&hash=" + v.Hash + "&mid=" + v.Key + "&platid=4&album_id=973367"
 
 				reqestlink, _ := http.NewRequest("GET", urls, nil)
 				reqestlink.Header.Set("Accept", "*/*")
@@ -93,17 +95,33 @@ func Kuwomusic(urlname string) Kugoinfo {
 
 				responselink, _ := client.Do(reqestlink)
 				bodylink, _ := ioutil.ReadAll(responselink.Body)
-				bodystrlink := string(bodylink)
-				fmt.Println(bodystrlink)
-				fmt.Println(urls)
-				fmt.Println(n)
+				//bodylinkstr := string(bodylink)
+
+				bodymap := ParseResponse(bodylink)
+				err := mapstructure.Decode(bodymap, &Kuwomodelone)
+
+				if err != nil {
+					fmt.Println("链接错误")
+				}
+
+				errs := mapstructure.Decode(Kuwomodelone.Data, &Musiclinkout)
+				if errs != nil {
+					fmt.Println("转化错误")
+				}
+				Musiclinkoutlist[n].Author_name = Musiclinkout.Author_name
+				Musiclinkoutlist[n].Lyrics = Musiclinkout.Lyrics
+				Musiclinkoutlist[n].Play_url = Musiclinkout.Play_url
+				Musiclinkoutlist[n].Song_name = Musiclinkout.Song_name
+
+				fmt.Println("写完")
 
 			}
+			return Musiclinkoutlist
 		}
 
 	}
 
-	return Kuwomodellist
+	return nil
 
 }
 

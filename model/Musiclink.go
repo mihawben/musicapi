@@ -9,19 +9,18 @@ import (
 
 type MusicLink struct {
 	gorm.Model
+
 	Linkname string `gorm:"type:varchar(250);not null" json:"linkname" label:"链接名称"`
 	Link     string `gorm:"type:varchar(500);not null" json:"link" label:"链接"`
 }
 
-
-
 //返回歌单及链接
 
-func Musiclinklist(page string, pagesize string, name string) ([]Musiclinkout, int) {
+func Musiclinklist(page string, pagesize string, name string) ([]util.Musiclinkout, int) {
 
 	var MusiclikList []MusicLink
-	var Kuwomodellist util.Kugoinfo
-	
+	var Musiclinklist []util.Musiclinkout
+
 	var pageCount int
 	err = db.Select("Linkname", "Link").Find(&MusiclikList).Error
 	for _, s := range MusiclikList {
@@ -36,16 +35,17 @@ func Musiclinklist(page string, pagesize string, name string) ([]Musiclinkout, i
 			build.WriteString("&pagesize=")
 			build.WriteString(pagesize)
 			s3 := build.String()
-			Kuwomodellist = util.Kuwomusic(s3)
+			Musiclinklist = util.Kuwomusic(s3)
 			//初始化数组  添加数组长度
-			 Musiclinkoutlist:= make([]Musiclinkout,len(Kuwomodellist.Info))
-			for ids, v := range Kuwomodellist.Info{
-				
-				if v.Filename!="" && v.Hash!=""{
-					Musiclinkoutlist[ids].MusicName = v.Filename
-					Musiclinkoutlist[ids].MusicLink = v.Hash
+			Musiclinkoutlist := make([]util.Musiclinkout, len(Musiclinklist))
+			for ids, v := range Musiclinklist {
+
+				if v.Author_name != "" && v.Song_name != "" {
+					Musiclinkoutlist[ids].Author_name = v.Author_name
+					Musiclinkoutlist[ids].Song_name = v.Song_name
+					Musiclinkoutlist[ids].Lyrics = v.Lyrics
+					Musiclinkoutlist[ids].Play_url = v.Play_url
 				}
-				    
 
 			}
 			return Musiclinkoutlist, pageCount
