@@ -40,12 +40,12 @@ func Musiclinklist(page string, pagesize string, name string) ([]util.Musiclinko
 			Musiclinkoutlist := make([]util.Musiclinkout, len(Musiclinklist))
 			for ids, v := range Musiclinklist {
 
-				if v.Author_name != "" && v.Song_name != "" {
+				
 					Musiclinkoutlist[ids].Author_name = v.Author_name
 					Musiclinkoutlist[ids].Song_name = v.Song_name
 					Musiclinkoutlist[ids].Lyrics = v.Lyrics
 					Musiclinkoutlist[ids].Play_url = v.Play_url
-				}
+				
 
 			}
 			return Musiclinkoutlist, pageCount

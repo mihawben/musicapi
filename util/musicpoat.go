@@ -116,9 +116,9 @@ func Kuwomusic(urlname string) []Musiclinkout {
 				fmt.Println("写完")
 
 			}
-			return Musiclinkoutlist
+			
 		}
-
+		return Musiclinkoutlist
 	}
 
 	return nil
